@@ -1,0 +1,23 @@
+---
+title: "Shi's data project"
+subtitle: "Kind of a profolio"
+
+author: "<h3>Shi Lu</h3>"
+tags: [Data analysis, Big Data, Predictive Analytics] 
+
+
+output:
+  html_document:
+    theme: spacelab
+    highlight: tango
+    toc: true
+    number_sections: true
+    toc_depth: 2
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+---
+* UMich E-mail: lushi@umich.edu
+
+# The 670 project
+[The paper pdf](file:///670/Final_report_1209.pdf)
