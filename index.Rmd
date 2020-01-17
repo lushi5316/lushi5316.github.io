@@ -20,7 +20,7 @@ output:
 * UMich E-mail: lushi@umich.edu
 
 # The 670 project
-[The paper pdf](file:///670/Final_report_1209.pdf)
+[The paper pdf](670/Final_report_1209.pdf)
 
 # The 650 project
-[The term paper](/650_HS/final_paper.html)
+[The term paper](650_HS/final_paper.html)
