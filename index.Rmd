@@ -21,3 +21,6 @@ output:
 
 # The 670 project
 [The paper pdf](file:///670/Final_report_1209.pdf)
+
+# The 650 project
+[The term paper](/650_HS/final_paper.html)
