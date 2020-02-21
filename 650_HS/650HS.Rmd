@@ -18,8 +18,10 @@ output:
       smooth_scroll: true
 ---
 [Back to Homepage](../index.html)
+
 * liangcc@umich.edu, lushi@umich.edu
 * Instructor: Ivo Dinov
+
 # Abstract
 
 In this project, we intend to use machine learning techniques to predict the visitor’s shopping intention. The data consist of features such as the closeness of the site visiting time to a special day, the number of pages visited by the visitor about a product, which was extracted from the visit log of an online shopping website. Random forest (RF), support vector machines(SVMs), and multilayer perceptron(MLP) are used for prediction. We use oversampling to improve the performance and scalability of the classifier. An ensemble using the predictions from the three models was run. The results show that MLP has higher accuracy and F1 Score than RF and SVM while oversampling did help with the model performance. The ensemble had the highest accuracy and F1 score among all. Page value, number of product-related pages visited and product-related page visiting time is the most important features to predict purchasing intention.
@@ -66,8 +68,8 @@ The dataset that is used in the current project comes from Sakar et al.(2019), i
 After downloaded, we used read.csv() to import the file directly and summaried to see some statistics, like max, min and median values of 18 features. There are 10 numerical features and 8 categorical features. 
 
 ```{r, include=FALSE}
-setwd("~/Desktop/HS 650/final project/")
-rm(list=ls())
+# setwd("~/Desktop/HS 650/final project/")
+# rm(list=ls())
 
 library(magrittr)
 library(kableExtra)
@@ -507,3 +509,6 @@ For future research, different methods of data augmentation should be experiment
 Dinov, Ivo D. (2018). Data Science and Predictive Analytics Biomedical and Health Applications using R /. Cham : Springer International Publishing : Imprint: Springer.
 
 Sakar, C Okan, Sakar, C Okan, Polat, S Olcay, Polat, S Olcay, Katircioglu, Mete, Katircioglu, Mete, Kastro, Yomi, et al. (2019). Real-time prediction of online shoppers’ purchasing intention using multilayer perceptron and LSTM recurrent neural networks. Neural Computing and Applications, 31(10), 6893–6908. London: Springer London.
+
+
+[Back to Homepage](../index.html)
