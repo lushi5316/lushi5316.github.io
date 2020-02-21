@@ -1,8 +1,8 @@
 ---
-title: "Shi's data project"
-subtitle: "Kind of a profolio"
+title: "Shi Lu's Data Project"
+subtitle: "lushi@umich.edu"
 
-author: "<h3>Shi Lu</h3>"
+# author: "<h3>Shi Lu</h3>"
 tags: [Data analysis, Big Data, Predictive Analytics] 
 
 
@@ -11,16 +11,31 @@ output:
     theme: spacelab
     highlight: tango
     toc: true
-    number_sections: true
+    number_sections: false
     toc_depth: 2
     toc_float:
       collapsed: false
       smooth_scroll: true
 ---
-* UMich E-mail: lushi@umich.edu
+This is ## Shi Lu.
+I am currently sharpening my data skills at School of Information, University of Michigan, Ann Arbor, with a specialization in Data Science Interaction. I graduated from University of Washington in 2017, where I received degrees in Bachelor of Art in Linguistics and Bachelor of Science in Psychology. 
 
-# The 670 project
-[The paper pdf](https://github.com/lushi5316/lushi5316.github.io/blob/master/670/Final_report_1209.pdf)
+I am passinate about anything involved with data or language.
+I am actively seeking for a full-time position for Data Analysis/Data Sciences/User Reseach.
 
-# The 650 project
-[The term paper](650_HS/final_paper.html)
+
+# [Pediction of Online Shoppers](650_HS/final_paper.html)
+Finding a good book to read used to be a troublesome prospect that meant a trip to the library. However, in the age of information and the explosion of digitized data, it's easier than ever to discover new books. However, sites such as GoodReads only retrieve books with titles like a query. In this research project, we propose a book information retrieval system that would allow users to retrieve information on books relevant to their query—whether through the title or the description of a book, with the use of the BM25 algorithm. After extracting book data from the Google API, preprocessing of the title and plot text, TF-IDF is used for ranking books by relevance. The most similar text is retrieved as an outcome of the book information retrieval system and results are evaluated by hand.
+
+# [Machine Learning Approach to Accent Classiﬁcation](671/671SI.html)
+When people with different native languages speak English, their phones are1 systematically changed which leads to a lower performance for speech recognition systems. A better model for classifying the native accent of an English speaker can help with the recalibration of the speech recognition for better performance. The current project utilized machine learning models to train classiﬁers predicting if an English speaker is with a native accent or a Chineseaccent. Audios were converted to MFCCs vectors and were used to train SVM,MLP,Gradient Boosting,and CNN models. CNN model has the highest accuracy among these models, while data augmentation could improve the accuracy of the CNN model.
+
+# [Book Retrieval System](650_SI/650SI.html)
+Finding a good book to read used to be a troublesome prospect that meant a trip to the library. However, in the age of information and the explosion of digitized data, it's easier than ever to discover new books. However, sites such as GoodReads only retrieve books with titles like a query. In this research project, we propose a book information retrieval system that would allow users to retrieve information on books relevant to their query—whether through the title or the description of a book, with the use of the BM25 algorithm. After extracting book data from the Google API, preprocessing of the title and plot text, TF-IDF is used for ranking books by relevance. The most similar text is retrieved as an outcome of the book information retrieval system and results are evaluated by hand.
+
+# [Employee turnover behavior analysis](670/670SI.html)
+When excellent employees leave, companies face huge losses. Employee turnover can be a significant factor in companies’ financial situations. In the current project, we utilized machine learning techniques to predict employee turnover behavior and identified important factors that affect such behavior based on a dataset that was collected from three job-searching platforms. We found the company and average working month of this employee is the most important factor in turnover. On the other hand, the average working month and start year of one employee is the most important factors of the total length of working experience.
+
+# [Mobile Game Analysis](649/649.html)
+
+

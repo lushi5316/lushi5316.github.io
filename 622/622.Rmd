@@ -1,0 +1,66 @@
+---
+title: "User Experience Research Report"
+subtitle: "<h3>Fall 2019, SI671, Term Paper</h3>"
+
+author: "<h3>Shi Lu, Li Zhu</h3>"
+#tags: [DSPA, SOCR, MIDAS, Big Data, Predictive Analytics] 
+
+
+output:
+  html_document:
+    theme: spacelab
+    highlight: tango
+    toc: true
+    number_sections: true
+    toc_depth: 2
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+---
+* lushi@umich.edu, izhuli@umich.edu
+
+[Back to Homepage](../index.html)
+
+# Executive Summary
+The first section of every report should be an executive summary. Summarize your methods, your results, and your recommendations concisely. The Executive Summary should convey all of the critical information contained in your report, though in an abbreviated form.
+
+# Introduction
+The introduction to your report is to orient the reader to your understanding of the system’s goals and audience and what you were trying to accomplish with your study. It should contain the following: 
+* a brief overview of the system you’re evaluating
+* the key questions you are seeking to answer with this study (e.g., interviews, survey, usability test)
+* some motivation for why those questions are important
+
+# Methods
+In your methods section, present the details of what you did to carry out this study. This section will typically contain the following:
+* what method or methods you employed (e.g., interviews, comparative analysis, etc.)
+* details of how you implemented the study. These will vary according to the type of study, but will include such details as:
+* for interviews, surveys, and usability tests
+your target population
+your recruiting methods
++ a summary of your participants (omitting names, but including salient demographic details)
++ your instruments (e.g., interview guide, questionnaires, task descriptions), with pointers to the appendix if they are too long to include in the body
++ your analysis methods (e.g., reviewing notes, interpretation sessions, statistical analyses, analysis of critical incidents)
+* for comparative analysis: 
++ the criteria for selecting comparison products
++ the products selected, with brief summaries
++ the criteria used for comparing products
+* for heuristic evaluation:
++ the specific sections of the product selected
++ the process of evaluation
++ the heuristics used
++ the process of combining results and assessing severity
+
+# Findings and Recommendations
+This section will usually be the longest section of your report and should contain the most significant findings from your study, along with recommendations for the client about what they should do. Usually you will have to be selective about the findings you include here, as you will have more findings than it’s useful to present in the body of the report. This section will include:
+
+## Summary Results
+Depending on the method, it may be appropriate to present an overall assessment of the system based on the results of this study and/or some generic statements about user needs. For example “By and large, users reported positive experiences with Forktopia.com, but their responses indicated areas that can improve significantly,” or “Our study results reveal serious problems with Forktopia.com’s usability, with 3 of 5 users failing to successfully complete one or more key tasks” or “The target population for Forktopia values convenience over a wide selection, suggesting that a shopping experience that emphasizes a few popular options may be more successful than one that offers powerful search capabilities.”
+
+## Key Findings
+Select a handful of key findings (usually 3-7) to present. These can be further categorized into a few groups if that makes sense for your study. For each finding, be sure to be clear about the following:
+* what the problem is and how it manifests itself in * the system (e.g., what pages, screens, or widgets are affected). It can be useful to employ screen shots (See Fig. 1).
+the evidence you have that a problem exists
+* your assessment of the severity of the problem
+
+[Back to Homepage](../index.html)
+

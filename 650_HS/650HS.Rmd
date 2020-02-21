@@ -1,0 +1,509 @@
+---
+title: "Pediction of Online Shoppers' Purchasing Intention"
+subtitle: "<h3>Fall 2019, DSPA(HS650), Term Paper</h3>"
+
+author: "<h3>Chen Liang, Shi Lu</h3>"
+#tags: [DSPA, SOCR, MIDAS, Big Data, Predictive Analytics] 
+
+
+output:
+  html_document:
+    theme: spacelab
+    highlight: tango
+    toc: true
+    number_sections: true
+    toc_depth: 2
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+---
+[Back to Homepage](../index.html)
+* liangcc@umich.edu, lushi@umich.edu
+* Instructor: Ivo Dinov
+# Abstract
+
+In this project, we intend to use machine learning techniques to predict the visitor’s shopping intention. The data consist of features such as the closeness of the site visiting time to a special day, the number of pages visited by the visitor about a product, which was extracted from the visit log of an online shopping website. Random forest (RF), support vector machines(SVMs), and multilayer perceptron(MLP) are used for prediction. We use oversampling to improve the performance and scalability of the classifier. An ensemble using the predictions from the three models was run. The results show that MLP has higher accuracy and F1 Score than RF and SVM while oversampling did help with the model performance. The ensemble had the highest accuracy and F1 score among all. Page value, number of product-related pages visited and product-related page visiting time is the most important features to predict purchasing intention.
+
+# Introduction
+
+For online shopping websites, they could be popular for visitors, but the conversion rate for those who are interested in the product to those who make the purchases could less than ideal. Correctly identifying the aspect that websites could improve upon in order to turn more “visitors” into “buyers” becomes crucial. Also, being able to predict the potential “buyers” with higher accuracy would allow the websites to properly allocate their advertising or other visual information to encourage purchase behavior. Our goal of this paper is to find a better model to predict purchase intention and identify the important features that contribute to the prediction. 
+
+Feature “Product Related” refers to the number of pages visited by shoppers about the feature “Product Related”. The product is the one that shoppers want to buy, thus, the “Product Related” is an important feature to predict shopper’s intention.
+
+Feature “Month” represents the Month value of the visit day, and feature “Special Day” represents how close the day is to a “special day” which could be holidays and etc. Shoppers know that for some holidays, there is much more discount than ever. They would like to wait for that holiday to purchase what they into before. Thus, the month can be a crucial feature to predict their purchasing intention. 
+
+For features that are important to the purchase intention, we hypothesis that Product Related, and Month of the session are the most features to predict shopper’s intention.
+
+# Data Exploration and Visualization
+
+## Data Description
+
+The dataset that is used in the current project comes from Sakar et al.(2019), in which the authors designed a system that could predict online shoppers purchasing intention and page abandonment. Online shoppers purchasing intention was cast as a binary classification problem, such that viewers would either made the final purchase or not. The dataset consists of 12330 sessions, of which record a session that a viewer visited items of the websites. Each session would belong to a different user in a 1-year period to avoid any tendency to a specific campaign, special day, user profile, or period. The dataset is highly imbalanced for 84.5%(10422) of the viewers did not make the final purchase.
+
+| Feature        | Feature Description | 
+| ------------- |:-------------:| 
+| Administrative | Number of pages visited by the visitor about account management| 
+| Administative duration | Total amount of time (in seconds) spent by the visitor on account management related pages|  
+| Informational | Number of pages visited by the visitor about Web site, communication and address information of the shopping site |
+| Informational duration | Total amount of time (in seconds) spent by the visitor on informational pages| 
+| Product related | Number of pages visited by visitor about product related pages|  
+| Product related duration | Total amount of time (in seconds) spent by the visitor on product related pages |
+| Bounce rate | Average bounce rate value of the pages visited by the visitor| 
+| Exit rate | Average exit rate value of the pages visited by the visitor|  
+| Page value | Average page value of the pages visited by the visitor |
+| Special day | Closeness of the site visiting time to a special day| 
+| OperatingSystems | Operating system of the visitor|  
+| Browser | Browser of the visitor |
+| Region | Geographic region from which the session has been started by the visitor| 
+| TrafficType | Traffic source by which the visitor has arrived at the Web site (e.g., banner, SMS, direct)|
+| VisitorType | Visitor type as ‘‘New Visitor,’’ ‘‘Returning Visitor,’’ and ‘‘Other’’ |
+| Weekend | Boolean value indicating whether the date of the visit is weekend| 
+| Month | Month value of the visit date|  
+| Revenue | Class label indicating whether the visit has been finalized with a transaction |
+
+## Data Summary
+
+After downloaded, we used read.csv() to import the file directly and summaried to see some statistics, like max, min and median values of 18 features. There are 10 numerical features and 8 categorical features. 
+
+```{r, include=FALSE}
+setwd("~/Desktop/HS 650/final project/")
+rm(list=ls())
+
+library(magrittr)
+library(kableExtra)
+library(xts)
+library(psych)
+library(corrplot)
+library(caret)
+library(kernlab)
+library(MLmetrics)
+library(RSNNS)
+library(dplyr)
+
+set.seed(1234)
+```
+
+```{r}
+data <- read.csv("online_shoppers_intention.csv")
+data <- na.locf(data)
+data_sum <- summary(data)
+data_sum %>% kable() %>%
+              kable_styling("striped") %>%
+              scroll_box(width = "700px", height = "400px")
+```
+
+## Data Visualization
+
+ * Chart 1: created a heat map to see the correlation between 10 numerical variables. We found that the type of page and the stay of that page has relatively higher correlations. 
+ 
+```{r}
+data_vis <- data[,]
+col <- cor(data_vis[, c("Administrative","Administrative_Duration", "Informational",  "Informational_Duration", "ProductRelated","ProductRelated_Duration", "BounceRates", "ExitRates", "PageValues", "SpecialDay") ])
+corrplot(col, method = "square", title ="Correlation Matrix for Online Shoppers Intention", tl.cex = 0.7, tl.col = "black", mar = c(1,1,1,1))
+```
+
+ * Chart 2: used pairs.panels to create a correlation, density and hist diagram of two features: ProductRelated and ProductRelated_Duration, which has the second-highest correlation value.
+ 
+```{r}
+pairs.panels(data_vis[c("ProductRelated","ProductRelated_Duration")], 
+             method = "pearson", # correlation method
+             hist.col = "pink",
+             density = TRUE,  # show density plots
+             )
+```
+
+ * Chart 3: used the pairs.panels to display the highest correlation value of BounceRates and ExitRates.
+ 
+```{r}
+pairs.panels(data_vis[c("BounceRates", "ExitRates")], 
+             method = "pearson", # correlation method
+             hist.col = "pink",
+             density = TRUE,  # show density plots
+             )
+```
+
+ * Chart 4: used barplot to display popular shopping months and found out “May” is the most popular one.
+ 
+```{r}
+data_vis$Month <-factor(data_vis$Month, levels = c("Feb", "Mar", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
+barplot(table(data_vis$Month), main="Popular Shopping Month", xlab= "Month", ylab="Count",border="navy",
+col="pink")
+```
+
+ * Chart 5: displayed the different types of visitors and found out “returning_visitor” has many more numbers.
+ 
+```{r}
+barplot(table(data_vis$VisitorType), main="Visitor Type", xlab= "Type", ylab="Count",border="navy" ,col = "pink") 
+```
+
+# Model Training without Oversampling
+
+Support vector machine, Random Forest and Multilayer Perceptron models to predict shoppers' purchasing intention.
+
+* Support Vector Machines (SVM) SVM a very often used for classification. It uses hyperplanes to split the data into separate groups, or classes. And kernel tricks can help with transforming the data to a higher dimension before the hyperplanes split the data into groups.
+
+* Random Forest: Decision trees and Random Forest is very useful for feature selection since there is always a binary split at every node.
+
+* Multilayer perceptron (MLP) is one of the most often used neural_network for classification.
+Users may specify the number of hidden layers. The model optimize a log-loss function using stochastic gradient descent. 
+
+
+## Support Vector Machine
+
+SVM is very often used for classification. It uses hyperplanes to split the data into separate groups, or classes. And kernel tricks can help with transforming the data to a higher dimension before the hyperplanes split the data into groups.
+
+**set categorical features as class variables.**
+
+```{r}
+data$OperatingSystems <- as.factor(data$OperatingSystems)
+data$Browser <- as.factor(data$Browser)
+data$Region <- as.factor(data$Region)
+data$TrafficType <- as.factor(data$TrafficType)
+data$VisitorType <- as.factor(data$VisitorType)
+data$Weekend <- as.factor(data$Weekend)
+data$Month <- as.factor(data$Month)
+data$Revenue <- as.factor(data$Revenue)
+```
+
+**train test split**
+
+```{r}
+sample_size <- floor(0.9 * nrow(data))
+train_ind <- sample(seq_len(nrow(data)), size = sample_size)
+data_train <- data[train_ind, ]
+data_test <- data[-train_ind, ]
+```
+
+```{r}
+svm_model <- ksvm(Revenue ~ ., data = data_train, kernel = "vanilladot")
+svm_pred<- predict(svm_model, data_test)
+F1_Score(y_pred = svm_pred, y_true = data_test$Revenue, positive = "TRUE")
+Accuracy(y_pred = svm_pred, y_true = data_test$Revenue)
+```
+
+## Random forest
+
+```{r, message = FALSE}
+require(randomForest)
+rf_model<- randomForest(Revenue~., data=data_train,importance=TRUE,ntree=15)
+rf_pred <- predict(rf_model, data_test)
+F1_Score(y_pred = rf_pred, y_true = data_test$Revenue, positive = "TRUE")
+Accuracy(y_pred = rf_pred, y_true = data_test$Revenue)
+```
+
+## Multilayer Perceptron Classifier
+
+```{r}
+data_numeric <- data[,]
+data_numeric$Revenue <- as.integer(as.factor(data_numeric$Revenue))
+data_numeric$Month <- as.integer(as.factor(data_numeric$Month))
+data_numeric$Weekend <- as.integer(as.factor(data_numeric$Weekend))
+data_numeric$VisitorType <- as.integer(as.factor(data_numeric$VisitorType))
+data_numeric$TrafficType <- as.integer(as.factor(data_numeric$TrafficType))
+data_numeric$Region <- as.integer(as.factor(data_numeric$Region))
+data_numeric$Browser <- as.integer(as.factor(data_numeric$Browser))
+data_numeric$OperatingSystems <- as.integer(as.factor(data_numeric$OperatingSystems))
+```
+
+
+```{r}
+data_numeric_train <- data_numeric[train_ind, ]
+data_numeric_test <- data_numeric[-train_ind, ]
+```
+
+
+```{r}
+mlp_train <- data_numeric_train[sample(1:nrow(data_numeric_train),length(1:nrow(data_numeric_train))),1:ncol(data_numeric_train)]
+
+mlp_train_x <- mlp_train[,1:17]
+mlp_train_y <- decodeClassLabels(mlp_train[,18])
+mlp_data <- splitForTrainingAndTest(mlp_train_x, mlp_train_y, ratio=0.1)
+
+mlp_model <- mlp(mlp_data$inputsTrain, mlp_data$targetsTrain, size=50, learnFuncParams=c(0.001),
+             linOut=FALSE,hiddenActFunc = "Act_Logistic",
+              maxit=50, inputsTest=mlp_data$inputsTest, targetsTest=mlp_data$targetsTest)
+```
+
+
+```{r}
+mlp_test_x <- data_numeric_test[,1:17]
+mlp_test_y <- decodeClassLabels(data_numeric_test[,18])
+mlp_pred <- predict(mlp_model,mlp_test_x, type="class")
+```
+
+```{r}
+gold = as.numeric(mlp_test_y[,2])
+temp <- as.numeric(mlp_pred[,2])
+pred <- temp
+
+pred[temp>0.2] = 1
+pred[temp<=0.2] = 0
+
+
+tp = 0
+fp = 0
+fn = 0
+tn = 0
+
+for (i in 1:1233){
+  
+  if(gold[i]==1){
+    if(pred[i]==1){
+      tp = tp + 1
+    }
+    else{
+      fn = fn + 1
+    }
+  }
+  else{
+    if(pred[i]==1){
+     fp  = fp + 1
+    }
+    else{
+      tn  = tn + 1
+    }
+  }
+}
+
+recall = tp/(tp+fn)
+preci = tp/(tp+fp)
+f1 = 2*recall*preci/(recall + preci)
+accuracy = (tp+tn)/(tp+tn+fp+fn)
+print(f1)
+print(accuracy)
+```
+
+# Model Training with Oversampling
+
+Because the data set is highly imbalances such that there are far fewer users who made the purchases than those who did not, we used oversampling to increase the number of purchased users, by simply duplicating the entries 5.5 times. After this process, the categories for users who made the final purchases and who did not contain the same number of entries.
+
+**Oversampling**
+
+```{r}
+data_over <- read.csv("online_shoppers_intention.csv")
+data_over <- na.locf(data_over)
+data_over$OperatingSystems <- as.factor(data_over$OperatingSystems)
+data_over$Browser <- as.factor(data_over$Browser)
+data_over$Region <- as.factor(data_over$Region)
+data_over$TrafficType <- as.factor(data_over$TrafficType)
+data_over$VisitorType <- as.factor(data_over$VisitorType)
+data_over$Weekend <- as.factor(data_over$Weekend)
+data_over$Month <- as.factor(data_over$Month)
+data_over$Revenue <- as.factor(data_over$Revenue)
+```
+
+```{r}
+data_over_train <- data_over[train_ind, ]
+data_over_test <- data_over[-train_ind, ]
+data_over_train <- upSample(data_over_train, data_over_train$Revenue)
+data_over_train <- select(data_over_train, -Class)
+```
+
+## Support Vector Machines (SVMs)
+
+```{r}
+svm_over <- ksvm(Revenue ~ ., data = data_over_train, kernel = "vanilladot")
+svm_over_pred<- predict(svm_over, data_over_test)
+F1_Score(y_pred = svm_over_pred, y_true = data_over_test$Revenue, positive = "TRUE")
+Accuracy(y_pred = svm_over_pred, y_true = data_over_test$Revenue)
+```
+
+## RandomForest
+
+```{r}
+require(randomForest)
+rf_over <- randomForest(Revenue~., data=data_over_train,importance=TRUE,ntree=15)
+rf_over_pred<- predict(rf_over,data_over_test)
+F1_Score(y_pred = rf_over_pred, y_true = data_over_test$Revenue, positive = "TRUE")
+Accuracy(y_pred = rf_over_pred, y_true = data_over_test$Revenue)
+```
+
+## Multilayer Perceptron Classifier
+
+```{r}
+data_over_numeric <- data_over[,]
+data_over_numeric$Revenue <- as.factor(data_over_numeric$Revenue)
+data_over_numeric$Month <- as.integer(as.factor(data_over_numeric$Month))
+data_over_numeric$Weekend <- as.integer(as.factor(data_over_numeric$Weekend))
+data_over_numeric$VisitorType <- as.integer(as.factor(data_over_numeric$VisitorType))
+data_over_numeric$TrafficType <- as.integer(as.factor(data_over_numeric$TrafficType))
+data_over_numeric$Region <- as.integer(as.factor(data_over_numeric$Region))
+data_over_numeric$Browser <- as.integer(as.factor(data_over_numeric$Browser))
+data_over_numeric$OperatingSystems <- as.integer(as.factor(data_over_numeric$OperatingSystems))
+```
+
+```{r}
+data_over_numeric_train <- data_over_numeric[train_ind, ]
+data_over_numeric_test <- data_over_numeric[-train_ind, ]
+```
+
+```{r}
+mlp_over_train_raw_order <- data_over_numeric_train
+mlp_over_train <- data_over_numeric_train[sample(1:nrow(data_over_numeric_train),length(1:nrow(data_over_numeric_train))),1:ncol(data_over_numeric_train)]
+
+mlp_over_train_x <- mlp_over_train[,1:17]
+mlp_over_train_y <- decodeClassLabels(mlp_over_train[,18])
+
+mlp_over_data <- splitForTrainingAndTest(mlp_over_train_x, mlp_over_train_y, ratio=0.1)
+# iris <- normTrainingAndTestSet(iris)
+
+mlp_over <- mlp(mlp_over_data$inputsTrain, mlp_over_data$targetsTrain, size=20, learnFuncParams=c(0.001), 
+              maxit=150, learnFunc="Rprop", inputsTest=mlp_over_data$inputsTest, targetsTest=mlp_over_data$targetsTest)
+```
+
+```{r}
+mlp_over_test_x <- data_over_numeric_test[,1:17]
+mlp_over_test_y <- decodeClassLabels(data_over_numeric_test[,18])
+mlp_over_pred <- predict(mlp_over,mlp_over_test_x, type="class")
+```
+
+```{r}
+gold = as.numeric(mlp_over_test_y[,2])
+temp <- as.numeric(mlp_over_pred[,2])
+pred <- temp
+
+pred[temp>0.5] = 1
+pred[temp<=0.5] = 0
+
+
+tp = 0
+fp = 0
+fn = 0
+tn = 0
+
+for (i in 1:1233){
+  
+  if(gold[i]==1){
+    if(pred[i]==1){
+      tp = tp + 1
+    }
+    else{
+      fn = fn + 1
+    }
+  }
+  else{
+    if(pred[i]==1){
+     fp  = fp + 1
+    }
+    else{
+      tn  = tn + 1
+    }
+  }
+}
+
+recall = tp/(tp+fn)
+preci = tp/(tp+fp)
+f1 = 2*recall*preci/(recall + preci)
+accuracy = (tp+tn)/(tp+tn+fp+fn)
+print(f1)
+print(accuracy)
+```
+
+## Ensemble
+
+Ensemble is to use the predictions of several different models as feature inputs, and train a new model based on these predictions. Theoretically the ensemble modle should be better than the previous models.In our case, this is an ensemble for the SVM, Random Forest, and MLP model with oversampling.
+
+```{r}
+
+mlp_over_train_x <- mlp_over_train_raw_order[,1:17]
+mlp_over_train_y <- decodeClassLabels(mlp_over_train_raw_order[,18])
+
+mlp_over_pred_train <- predict(mlp_over,mlp_over_train_x, type="class")
+temp <- as.numeric(mlp_over_pred_train[,2])
+mlp_over_pred_train_class <- temp
+mlp_over_pred_train_class[temp>0.5] = 1
+mlp_over_pred_train_class[temp<=0.5] = 0
+
+mlp_over_pred_test <- predict(mlp_over,mlp_over_test_x, type="class")
+temp <- as.numeric(mlp_over_pred_test[,2])
+mlp_over_pred_test_class <- temp
+mlp_over_pred_test_class[temp>0.5] = 1
+mlp_over_pred_test_class[temp<=0.5] = 0
+
+mlp_over_pred_train_class = mlp_over_pred_train_class==TRUE
+mlp_over_pred_test_class = mlp_over_pred_test_class==TRUE
+mlp_over_pred_train_class = as.factor(mlp_over_pred_train_class)
+mlp_over_pred_test_class = as.factor(mlp_over_pred_test_class)
+```
+
+
+```{r}
+rf_pred_train <- predict(rf_over, data_over_train)
+svm_pred_train <- predict(svm_over, data_over_train)
+ensemble_train <- cbind(svm_pred_train, rf_pred_train, mlp_over_pred_train_class, data_over_train$Revenue)
+ensemble_train <- as.data.frame(ensemble_train)
+colnames(ensemble_train) <- c("svm", "rf", "mlp", "true")
+
+
+rf_pred_test <- predict(rf_over, data_over_test)
+svm_pred_test <- predict(svm_over, data_over_test)
+ensemble_test <- cbind(svm_pred_test, rf_pred_test, mlp_over_pred_test_class, data_over_test$Revenue)
+ensemble_test <- as.data.frame(ensemble_test)
+colnames(ensemble_test) <- c("svm", "rf", "mlp", "true")
+
+```
+
+```{r}
+ensemble <- randomForest(x=ensemble_train, y= data_over_train$Revenue,importance=TRUE,ntree=3)
+#ensemble <- ksvm(x=ensemble_train, y= data_over_train$Revenue, kernel = "vanilladot")
+ensemble_pred <- predict(ensemble, ensemble_test)
+
+F1_Score(y_pred = ensemble_pred, y_true = data_over_test$Revenue, positive = "TRUE")
+Accuracy(y_pred = ensemble_pred, y_true = data_over_test$Revenue)
+```
+
+# Feature Selection
+
+Random Forest (without oversamping) will be used for feature selection, trying to identify what features would influence the prediction of shoppers buying intention.
+
+```{r}
+varImpPlot(rf_model, cex=0.7, col="navy"); print(rf_model)
+```
+
+In feature selection, Gini index is refering to information gain. According Accuracy and Gini index in the Random Forest model(without oversampling), when PageValues is excluded, both of the metrics would decrease.PageVlues is by far the most important feature when prediction if a viewer will make a final purchase. 
+
+```{r}
+imp <- randomForest::importance(rf_model)
+impvar <- rownames(imp)[order(imp[, 1], decreasing=TRUE)]
+op <- par(mfrow=c(2, 3))
+for (i in 1:6) {   # seq_along(impvar)) { # to plot the marginal probabilities for all features
+    partialPlot(rf_model, data_train, impvar[i], xlab=impvar[i],
+                main=paste("Partial Dependence of 'Revenue'\n on ", impvar[i]))
+}
+```
+
+According to the parcial dependecy plots,some most important features are PageValues, ProductRelated,  Administrative_Duration. PageValues have an earliest and steepest drop. 
+
+According to the common features yiled by the feature selection methods, we could possible stipulate that the value of pages, and number of pages that the viewer go through, and the time that the viewer spends on the related pages will be some crucial features to predict if they will make the final purchase or not. Further statistic analysis is needed to test such hypothese.
+
+# Result
+
+## Model prediction
+* Model training without oversampling at the first round, Random Forest has comparatively higher accuracy and F1 Score than RF and MLP. After introducing oversampling, they have similar accuracy and F1 Score. 
+
+* Oversampling does help with improving the performance of the models.
+
+* The Ensemble using the prediction of the three models yield the best accuracy and f1 score among all.
+
+## Feature selection
+
+* Salient features are: Page Value; Product Related (number of related pages have viewed); Product Related Duration(total time spent on related pages).
+
+* We can hypothesize that more attractive the pages are, the more pages the viewer reads, the more time the viewer spends on the pages, the more likely they are going to make a purchase.
+
+# Discussion/Future Research
+
+There are possible bugs for calculating f1 scores running MLP without oversampling. Also, More research for a proper model should be conducted. The three models that are run here may not be the best option for the task. Also, more research for semble should be done in order to show the advantage of the ensemble mode running accurately.
+
+For future research, different methods of data augmentation should be experimented to improve model performance. Statistic analysis of the selected features can be conduct to the causal effect of the purchasing intention. More Parameter tuning should be done to improve the performance of the models. Also, we can experiment with different structures of CNN for better performance.
+
+# Acknowledgment
+
+* Thanks Dr. Dinov for all the great instruction this semester. Most of the code in the current project are adopt from his lecture notes.
+* Thanks Xinyan Zhao for his great patience helping with debugging and things for oversampling.
+
+# Reference
+
+Dinov, Ivo D. (2018). Data Science and Predictive Analytics Biomedical and Health Applications using R /. Cham : Springer International Publishing : Imprint: Springer.
+
+Sakar, C Okan, Sakar, C Okan, Polat, S Olcay, Polat, S Olcay, Katircioglu, Mete, Katircioglu, Mete, Kastro, Yomi, et al. (2019). Real-time prediction of online shoppers’ purchasing intention using multilayer perceptron and LSTM recurrent neural networks. Neural Computing and Applications, 31(10), 6893–6908. London: Springer London.
