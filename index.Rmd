@@ -25,7 +25,7 @@ I am actively seeking for a full-time position for Data Analysis/Data Sciences/U
 
 # Data Analytics/Machine Learning
 
-## [Pediction of Online Shoppers](650_HS/650HS.html)
+## [Pediction of Online Shoppers' Purchase Intention](650_HS/650HS.html)
 
 * R 
 
