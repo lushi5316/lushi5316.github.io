@@ -1,8 +1,8 @@
 ---
 title: "Shi Lu's Data Project"
-subtitle: "lushi@umich.edu"
+# subtitle: "lushi@umich.edu"
 
-# author: "<h3>Shi Lu</h3>"
+author: "lushi@umich.edu"
 tags: [Data analysis, Big Data, Predictive Analytics] 
 
 
@@ -12,7 +12,7 @@ output:
     highlight: tango
     toc: true
     number_sections: false
-    toc_depth: 2
+    toc_depth: 3
     toc_float:
       collapsed: false
       smooth_scroll: true
@@ -20,46 +20,46 @@ output:
 This is Shi Lu.
 I am currently sharpening my data skills at School of Information, University of Michigan, Ann Arbor, with a specialization in Data Science Interaction. I graduated from University of Washington in 2017, where I received degrees in Bachelor of Art in Linguistics and Bachelor of Science in Psychology. 
 
-I am passinate about anything involved with data or language.
+I am passionate about anything involved with data or language.
 I am actively seeking for a full-time position for Data Analysis/Data Sciences/User Reseach.
 
-# Data Analytics/Machine Learning
+## Data Analytics/Machine Learning
 
-## [Pediction of Online Shoppers' Purchase Intention](650_HS/650HS.html)
+### [Pediction of Online Shoppers' Purchase Intention](650_HS/650HS.html)
 
 * R 
 
 In this project, we intend to use machine learning techniques to predict the visitor’s shopping intention. The data consist of features such as the closeness of the site visiting time to a special day, the number of pages visited by the visitor about a product, which was extracted from the visit log of an online shopping website. Random forest (RF), support vector machines(SVMs), and multilayer perceptron(MLP) are used for prediction. We use oversampling to improve the performance and scalability of the classifier. An ensemble using the predictions from the three models was run. The results show that MLP has higher accuracy and F1 Score than RF and SVM while oversampling did help with the model performance. The ensemble had the highest accuracy and F1 score among all. Page value, number of product-related pages visited and product-related page visiting time is the most important features to predict purchasing intention.
 
-## [Machine Learning Approach to Accent Classiﬁcation](671/671SI.html)
+### [Machine Learning Approach to Accent Classiﬁcation](671/671SI.html)
 
 * Python
 
-When people with different native languages speak English, their phones are1 systematically changed which leads to a lower performance for speech recognition systems. A better model for classifying the native accent of an English speaker can help with the recalibration of the speech recognition for better performance. The current project utilized machine learning models to train classiﬁers predicting if an English speaker is with a native accent or a Chineseaccent. Audios were converted to MFCCs vectors and were used to train SVM,MLP,Gradient Boosting,and CNN models. CNN model has the highest accuracy among these models, while data augmentation could improve the accuracy of the CNN model.
+When people with different native languages speak English, their phones are systematically changed which leads to a lower performance for speech recognition systems. A better model for classifying the native accent of an English speaker can help with the recalibration of the speech recognition for better performance. The current project utilized machine learning models to train classiﬁers predicting if an English speaker is with a native accent or a Chinese accent. Audios were converted to MFCCs vectors and were used to train SVM,MLP,Gradient Boosting,and CNN models. CNN model has the highest accuracy among these models, while data augmentation could improve the accuracy of the CNN model.
 
-## [Book Retrieval System](650_SI/650SI.html)
+### [Book Retrieval System](650_SI/650SI.html)
 
 * Python
 
 Finding a good book to read used to be a troublesome prospect that meant a trip to the library. However, in the age of information and the explosion of digitized data, it's easier than ever to discover new books. However, sites such as GoodReads only retrieve books with titles like a query. In this research project, we propose a book information retrieval system that would allow users to retrieve information on books relevant to their query—whether through the title or the description of a book, with the use of the BM25 algorithm. After extracting book data from the Google API, preprocessing of the title and plot text, TF-IDF is used for ranking books by relevance. The most similar text is retrieved as an outcome of the book information retrieval system and results are evaluated by hand.
 
-## [Employee Turnover Behavior Analysis](670/670SI.html)
+### [Employee Turnover Behavior Analysis](670/670SI.html)
 
 * Python
 
 When excellent employees leave, companies face huge losses. Employee turnover can be a significant factor in companies’ financial situations. In the current project, we utilized machine learning techniques to predict employee turnover behavior and identified important factors that affect such behavior based on a dataset that was collected from three job-searching platforms. We found the company and average working month of this employee is the most important factor in turnover. On the other hand, the average working month and start year of one employee is the most important factors of the total length of working experience.
 
-# Data Visulization
+## Data Visulization
 
-# [Mobile Game Analysis](649/649.html)
+### [Mobile Game Analysis](649/649.html)
 
 * Python, HTML
 
 Mobile games are important in daily life and in the tech industry. We are interested in creating visualizations for a dataset of mobile games acquired from the Apple App store, aiming to provide insights for the profitability of the games in terms of life span and genre. In the current project, our primary goal is to recommend the games to the game developers in a more reasonable and expressive way by implementing interactive visualizations. 
  
-# Consulting 
+## Consulting 
 
-# [Interpreter Service Project](501/501.html)
+### [Interpreter Service Project](501/501.html)
 
 * Interview, Affinity Wall
 
