@@ -462,7 +462,7 @@ Random Forest (without oversamping) will be used for feature selection, trying t
 varImpPlot(rf_model, cex=0.7, col="navy"); print(rf_model)
 ```
 
-In feature selection, Gini index is refering to information gain. According Accuracy and Gini index in the Random Forest model(without oversampling), when PageValues is excluded, both of the metrics would decrease.PageVlues is by far the most important feature when prediction if a viewer will make a final purchase. 
+In feature selection, Gini index is refering to information gain. According Accuracy and Gini index in the Random Forest model(without oversampling), when PageValues is excluded, both of the metrics would decrease. PageValues is by far the most important feature when prediction if a viewer will make a final purchase. 
 
 ```{r}
 imp <- randomForest::importance(rf_model)
@@ -501,7 +501,7 @@ For future research, different methods of data augmentation should be experiment
 
 # Acknowledgment
 
-* Thanks Dr. Dinov for all the great instruction this semester. Most of the code in the current project are adopt from his lecture notes.
+* Thanks Dr. Dinov for all the great instruction this semester. 
 * Thanks Xinyan Zhao for his great patience helping with debugging and things for oversampling.
 
 # Reference
