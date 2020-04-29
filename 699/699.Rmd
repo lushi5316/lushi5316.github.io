@@ -25,8 +25,11 @@ Predicting traffic has been important for websites’ daily services. Developing
 
 The current study experimented with three time-series models. The baseline model uses the monthly traffic of 2019 of a page to predict the monthly traffic of January of 2020. The random neighbor model randomly selects a page which has a hyperlink to the focal page and uses the 2019 data of the focal page and the neighboring page to predict the monthly traffic of January of 2020. The similar neighbor model also uses data from the focal and a neighboring page,  but the neighbor is selected based on its content similarity to the focal page. 
 Our main findings are 
+
   * baseline model, in general, has the best performance with the smallest MSE, MAE, and MAPE.
+
   * Random neighbor model and similar neighbor model have much larger MSE than the baseline model does, but the MAE are similar among the three models.
+
   * Prediction with a similar neighbor model has better prediction performance than with the random neighbor model on popular pages.
 
 # Introduction and Motivation
