@@ -55,10 +55,11 @@ Our datasets were acquired from Wikipedia dumps(Wikimedia, 2020), which is a col
   + Content dataset: full page content of all English Wikipedia pages
   + Internal Page Link dataset: internal links among Wikipedia pages
 
-## Pageview dataset:
+## Pageview dataset
 The pageview dataset contains the monthly traffic of each Wikipedia page in 2019. The files were downloaded as 12 zipped, and each contains the data of one month in 2019. Three variables were included, and examples are shown as below：
   + Category: letter code of the subproject and project of the page. 
 The subproject was the language code, such as “en”, “es”, “ch”, etc. The project is the content source that the data comes from. Some examples are “b” (Wikibooks), “d” (dictionary), “m” (mobile), “n” (Wikinews), “q” (Wikiquote), “s” (Wikisource), “v” (Wikiversity), and “voy” (Wikivoyage). For different versions of datasets, the Wikipedia in English could be represented as “en” or “en.z”. There could be more than one project to represent a specific source. For example, “en.q” means the data comes from English Wikiquote, “en.m.n” means the data is from the English Wikinews mobile site. 
+
   + Pagename: the name of the page in Wikipedia
   + Pageview: total number of visits to a specific page in a specific month
 
@@ -112,9 +113,9 @@ Table 2: Features of the Three Proposed Models
 
 |         | Model 1 | Model 2 | Model 3|
 |:-------:|:-------:|:-------:|:------:|
-|Time-series Model (VAR) | * | * | * |
-|Content Similarity| | | * |
-|Page link| | * | * |
+|Time-series Model (VAR) | x | x | x |
+|Content Similarity| | | x |
+|Page link| | x | x |
 
 
 ## Model 1: Baseline Time-series Model
